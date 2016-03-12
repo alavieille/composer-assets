@@ -1,0 +1,21 @@
+{
+    "name": "alavielle/composer-assets",
+    "description": "Composer Plugin for installing Assets (bower,npm)",
+    "keywords": ["composer", "assets", "npm", "bower"],
+    "homepage": "https://github.com/itkg-alavieille/composer-assets.git",
+    "license": "MIT",
+    "type": "composer-plugin",
+    "require": {
+        "composer-plugin-api": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Alav\\ComposerAssets\\": "src/ComposerAssets"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
