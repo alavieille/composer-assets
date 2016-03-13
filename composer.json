@@ -18,7 +18,11 @@
         }
     },
     "extra": {
-      "class": "Alav\\ComposerAssets\\ComposerAssetsPlugin"
+      "class": "Alav\\ComposerAssets\\ComposerAssetsPlugin",
+      "npm-assets": {
+        "test": "*",
+        "test-package2": "1.0"
+      }
     },
     "minimum-stability": "dev",
     "prefer-stable": true
