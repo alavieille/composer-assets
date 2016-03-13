@@ -29,6 +29,7 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
     {
         $this->composer = $composer;
         $this->io = $io;
+        echo "test";
     }
 
     /**
