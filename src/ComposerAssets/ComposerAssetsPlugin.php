@@ -15,6 +15,9 @@ use Composer\Script\ScriptEvents;
 class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
 {
 
+    /**
+     * @var Composer
+     */
     protected $composer;
     protected $io;
 
@@ -48,7 +51,12 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostInstall(Event $event)
     {
-        
+        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
+        var_dump($packages);
+        foreach ($packages as $package) {
+            $extra = $package->getExtra();
+            var_dump($extra);
+        }
     }
 
     /**
