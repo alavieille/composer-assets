@@ -2,6 +2,7 @@
 
 namespace Alav\ComposerAssets;
 
+use Alav\ComposerAssets\Loader\PackageLoader;
 use Composer\Composer;
 use Composer\EventDispatcher\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
@@ -53,11 +54,13 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
     {
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
         $package = $this->composer->getPackage();
-        var_dump($package);
-        foreach ($packages as $package) {
-            $extra = $package->getExtra();
-            var_dump($extra);
-        }
+        $packageLoader = new PackageLoader($package, $packages);
+        $npmAssetPackage = $packageLoader->extractAssets('npm');
+        var_dump($npmAssetPackage);
+        /*        foreach ($packages as $package) {
+                    $extra = $package->getExtra();
+                    var_dump($extra);
+                }*/
     }
 
     /**
@@ -65,6 +68,12 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostUpdate(Event $event)
     {
-        
+        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
+        $package = $this->composer->getPackage();
+        var_dump($package->getExtra());
+/*        foreach ($packages as $package) {
+            $extra = $package->getExtra();
+            var_dump($extra);
+        }*/
     }
 }
