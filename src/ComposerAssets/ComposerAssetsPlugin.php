@@ -29,7 +29,6 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
     {
         $this->composer = $composer;
         $this->io = $io;
-        echo "test";
     }
 
     /**
@@ -53,7 +52,8 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
     public function onPostInstall(Event $event)
     {
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
-        var_dump($packages);
+        $package = $this->composer->getPackage();
+        var_dump($package);
         foreach ($packages as $package) {
             $extra = $package->getExtra();
             var_dump($extra);
