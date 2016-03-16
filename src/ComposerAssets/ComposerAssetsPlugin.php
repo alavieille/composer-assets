@@ -56,8 +56,7 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
         $package = $this->composer->getPackage();
         $packageLoader = new PackageLoader($package, $packages);
-        $npmAssetPackage = $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
-        var_dump($npmAssetPackage);
+        $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
     }
 
     /**
@@ -65,8 +64,7 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostUpdate(Event $event)
     {
-        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
-        $package = $this->composer->getPackage();
-        var_dump($package->getExtra());
+        $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
+        $this->composer->getPackage();
     }
 }
