@@ -2,6 +2,14 @@ filter:
     excluded_paths:
         - 'tests/*'
         - 'vendor/*'
+build:
+    tests:
+        override:
+            -
+                command: 'phpunit --coverage-clover=some-file'
+                coverage:
+                    file: 'some-file'
+                    format: 'php-clover'
 checks:
     php: true
 coding_style:
