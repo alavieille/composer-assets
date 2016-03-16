@@ -10,6 +10,9 @@ build:
                 coverage:
                     file: 'some-file'
                     format: 'php-clover'
+    environment:
+          php:
+              version: 5.5
 checks:
     php: true
 coding_style:
