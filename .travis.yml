@@ -6,4 +6,4 @@ php:
 install:
   - composer update --no-progress --prefer-dist
 
-script: phpunit
+script: ./vendor/bin/phpunit
