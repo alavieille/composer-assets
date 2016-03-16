@@ -33,20 +33,21 @@ class PackageLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $extra
-     * @param array $extraVendor1
-     * @param array $extraVendor2
-     * @param array $expectedAssets
+     * @param array   $extra
+     * @param array   $extraVendor1
+     * @param array   $extraVendor2
+     * @param array   $expectedAssets
+     * @param boolean $dev
      *
      * @dataProvider dataProviderNpmExtraVendorAndExpectedAssets
      */
-    public function testNpmExtractAssets($extra, $extraVendor1, $extraVendor2, $expectedAssets)
+    public function testNpmExtractAssets($extra, $extraVendor1, $extraVendor2, $expectedAssets, $dev = false)
     {
         $assetType = 'npm';
         Phake::when($this->rootPackage)->getExtra()->thenReturn($extra);
         Phake::when($this->vendor1)->getExtra()->thenReturn($extraVendor1);
         Phake::when($this->vendor2)->getExtra()->thenReturn($extraVendor2);
-        $assetPackage = $this->packageLoader->extractAssets($assetType);
+        $assetPackage = $this->packageLoader->extractAssets($assetType, $dev);
 
         $this->assertInstanceOf('Alav\ComposerAssets\AssetPackages\AssetPackagesInterface', $assetPackage);
         $assets = $assetPackage->getAssets();
@@ -70,6 +71,13 @@ class PackageLoaderTest extends \PHPUnit_Framework_TestCase
                 array(),
                 array(),
                 array('fakePackage' => '1.0'),
+            ),
+            'npm package with dev' => array(
+                array('npm-assets' => array('fakePackage' => '1.0'), 'npm-assets-dev' => array('fakePackage-dev' => '2.0')),
+                array(),
+                array(),
+                array('fakePackage' => '1.0', 'fakePackage-dev' => '2.0'),
+                true,
             ),
             'npm package and other' => array(
                 array('npm-assets' => array('fakePackage' => '1.0'), 'other-assets' => array('otherPackage' => '5.0')),
@@ -107,6 +115,13 @@ class PackageLoaderTest extends \PHPUnit_Framework_TestCase
                 array('npm-assets' => array('vendor2Package' => '1.x')),
                 array('fakePackage' => '1.0 ~1.0', 'fakePackage2' => '*', 'vendor2Package' => '1.x'),
             ),
+            'npm package with same version dev' => array(
+                array('npm-assets' => array('fakePackage' => '1.0', 'fakePackage2' => '*')),
+                array('npm-assets-dev' => array('fakePackage' => '~1.0')),
+                array('npm-assets' => array('vendor2Package' => '1.x')),
+                array('fakePackage' => '1.0 ~1.0', 'fakePackage2' => '*', 'vendor2Package' => '1.x'),
+                true,
+            ),
             'npm package with vendor bower' => array(
                 array('npm-assets' => array('fakePackage' => '1.0', 'fakePackage2' => '*')),
                 array('npm-assets' => array('vendor1Package' => '~1.0')),
@@ -117,20 +132,21 @@ class PackageLoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $extra
-     * @param array $extraVendor1
-     * @param array $extraVendor2
-     * @param array $expectedAssets
+     * @param array   $extra
+     * @param array   $extraVendor1
+     * @param array   $extraVendor2
+     * @param array   $expectedAssets
+     * @param boolean $dev
      *
      * @dataProvider dataProviderBowerExtraVendorAndExpectedAssets
      */
-    public function testBowerExtractAssets($extra, $extraVendor1, $extraVendor2, $expectedAssets)
+    public function testBowerExtractAssets($extra, $extraVendor1, $extraVendor2, $expectedAssets, $dev = false)
     {
         $assetType = 'bower';
         Phake::when($this->rootPackage)->getExtra()->thenReturn($extra);
         Phake::when($this->vendor1)->getExtra()->thenReturn($extraVendor1);
         Phake::when($this->vendor2)->getExtra()->thenReturn($extraVendor2);
-        $assetPackage = $this->packageLoader->extractAssets($assetType);
+        $assetPackage = $this->packageLoader->extractAssets($assetType, $dev);
 
         $this->assertInstanceOf('Alav\ComposerAssets\AssetPackages\AssetPackagesInterface', $assetPackage);
         $assets = $assetPackage->getAssets();
@@ -154,6 +170,13 @@ class PackageLoaderTest extends \PHPUnit_Framework_TestCase
                 array(),
                 array(),
                 array('fakePackage' => '1.0'),
+            ),
+            'bower package with dev' => array(
+                array('bower-assets' => array('fakePackage' => '1.0'), 'bower-assets-dev' => array('fakePackage-dev' => '2.0')),
+                array(),
+                array(),
+                array('fakePackage' => '1.0', 'fakePackage-dev' => '2.0'),
+                true,
             ),
             'bower package and other' => array(
                 array('bower-assets' => array('fakePackage' => '1.0'), 'other-assets' => array('otherPackage' => '5.0')),
@@ -190,6 +213,13 @@ class PackageLoaderTest extends \PHPUnit_Framework_TestCase
                 array('bower-assets' => array('vendor1Package' => '~1.0')),
                 array(),
                 array('fakePackage' => '1.0', 'fakePackage2' => '*', 'vendor1Package' => '~1.0'),
+            ),
+            'bower package with same version dev' => array(
+                array('bower-assets' => array('fakePackage' => '1.0', 'fakePackage2' => '*')),
+                array('bower-assets-dev' => array('fakePackage' => '~1.0')),
+                array('bower-assets' => array('vendor2Package' => '1.x')),
+                array('fakePackage' => '1.0 ~1.0', 'fakePackage2' => '*', 'vendor2Package' => '1.x'),
+                true,
             ),
             'bower package with same version' => array(
                 array('bower-assets' => array('fakePackage' => '1.0', 'fakePackage2' => '*')),
