@@ -1,0 +1,9 @@
+language: php
+
+php:
+  - 5.5
+
+install:
+  - composer update --no-progress --prefer-dist
+
+script: phpunit
