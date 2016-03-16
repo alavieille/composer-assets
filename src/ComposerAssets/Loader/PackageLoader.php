@@ -4,8 +4,7 @@ namespace Alav\ComposerAssets\Loader;
 
 use Alav\ComposerAssets\AssetPackages\AbstractAssetPackages;
 use Alav\ComposerAssets\AssetPackages\AssetPackagesFactory;
-use Composer\Package\CompletePackageInterface;
-use Composer\Package\Package;
+use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
 
 /**
@@ -48,11 +47,11 @@ class PackageLoader
 
     /**
      * @param AbstractAssetPackages    $assetPackages
-     * @param CompletePackageInterface $package
+     * @param PackageInterface         $package
      * @param string                   $assetType
      * @param boolean                  $dev
      */
-    protected function extractAssetsPackage(AbstractAssetPackages $assetPackages, CompletePackageInterface $package, $assetType, $dev)
+    protected function extractAssetsPackage(AbstractAssetPackages $assetPackages, PackageInterface $package, $assetType, $dev)
     {
         $extraPackage = $package->getExtra();
         $this->addAssetRequire($assetPackages, $extraPackage, $assetType.self::KEY_ASSETS);
