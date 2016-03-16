@@ -8,8 +8,8 @@ namespace Alav\ComposerAssets\AssetPackages;
 class AssetPackagesFactory
 {
     protected static $assetPackagesClass = array(
-        "npm"   => 'Alav\ComposerAssets\AssetPackages\NpmAssetPackages',
-        "bower" => 'Alav\ComposerAssets\AssetPackages\BowerAssetPackages',
+        AssetPackagesInterface::NPM_TYPE   => 'Alav\ComposerAssets\AssetPackages\NpmAssetPackages',
+        AssetPackagesInterface::BOWER_TYPE => 'Alav\ComposerAssets\AssetPackages\BowerAssetPackages',
     );
 
     /**

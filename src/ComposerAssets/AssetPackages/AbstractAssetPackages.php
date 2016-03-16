@@ -5,9 +5,17 @@ namespace Alav\ComposerAssets\AssetPackages;
 /**
  * Class AbstractAssetPackages
  */
-abstract class AbstractAssetPackages
+abstract class AbstractAssetPackages implements AssetPackagesInterface
 {
     protected $assets = array();
+
+    /**
+     * @return array
+     */
+    public function getAssets()
+    {
+        return $this->assets;
+    }
 
     /**
      * @param string $name
@@ -15,6 +23,10 @@ abstract class AbstractAssetPackages
      */
     public function addAsset($name, $version)
     {
-        $this->assets[$name] = $version;
+        if (isset($this->assets[$name])) {
+            $this->assets[$name] .= ' ' . $version;
+        } else {
+            $this->assets[$name] = $version;
+        }
     }
 }
