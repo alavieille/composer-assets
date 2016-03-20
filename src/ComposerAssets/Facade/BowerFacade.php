@@ -5,13 +5,7 @@ namespace Alav\ComposerAssets\AssetPackages\Facade;
 /**
  * Class BowerFacade
  */
-class BowerFacade implements FacadeInterface
+class BowerFacade extends AbstractFacade implements FacadeInterface
 {
-    public $name;
-
-    public $description;
-
-    public $version;
-
-    public $dependencies = array();
+    const NAME = "bower-assets-packages";
 }

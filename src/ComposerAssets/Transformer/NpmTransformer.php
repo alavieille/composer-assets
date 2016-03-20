@@ -20,6 +20,11 @@ class NpmTransformer implements TransformerInterface
     {
         $facade = new NpmFacade();
 
+        $facade->name = NpmFacade::NAME;
+        $facade->description = NpmFacade::DESCRIPTION;
+        $facade->version = NpmFacade::VERSION;
+        $facade->dependencies = $assetPackages->getAssets();
+
         return $facade;
     }
 }

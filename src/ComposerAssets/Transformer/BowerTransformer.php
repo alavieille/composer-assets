@@ -20,6 +20,10 @@ class BowerTransformer implements TransformerInterface
     {
         $facade = new BowerFacade();
 
+        $facade->name = BowerFacade::NAME;
+        $facade->description = FacadeInterface::DESCRIPTION;
+        $facade->dependencies = $assetPackages->getAssets();
+
         return $facade;
     }
 }

@@ -5,11 +5,10 @@ namespace Alav\ComposerAssets\AssetPackages\Facade;
 /**
  * Class NpmFacade
  */
-class NpmFacade implements FacadeInterface
+class NpmFacade extends AbstractFacade implements FacadeInterface
 {
-    public $name;
+    const NAME    = "npm-assets-packages";
+    const VERSION = "1.0.0";
 
-    public $description;
-
-    public $dependencies = array();
+    public $version;
 }
