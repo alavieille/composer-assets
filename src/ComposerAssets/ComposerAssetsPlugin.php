@@ -55,6 +55,7 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
     {
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
         $package = $this->composer->getPackage();
+
         $packageLoader = new PackageLoader($package, $packages);
         $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
     }
