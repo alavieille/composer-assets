@@ -2,7 +2,6 @@
 
 namespace Alav\ComposerAssets\Tests\Transformer;
 
-use Alav\ComposerAssets\Transformer\BowerTransformer;
 use Alav\ComposerAssets\Transformer\NpmTransformer;
 use Phake;
 
