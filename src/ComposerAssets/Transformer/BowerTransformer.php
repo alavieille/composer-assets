@@ -3,27 +3,27 @@
 namespace Alav\ComposerAssets\Transformer;
 
 use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
-use Alav\ComposerAssets\AssetPackages\Facade\BowerFacade;
-use Alav\ComposerAssets\AssetPackages\Facade\FacadeInterface;
 
 /**
  * Class BowerTransformer
  */
 class BowerTransformer implements TransformerInterface
 {
+    const NAME = "bower-assets-packages";
+    const DESCRIPTION = "This file is auto-generated. Do not change it";
+
     /**
      * @param AssetPackagesInterface $assetPackages
      *
-     * @return FacadeInterface
+     * @return array
      */
     public function transform(AssetPackagesInterface $assetPackages)
     {
-        $facade = new BowerFacade();
+        $json = array();
+        $json["name"] = self::NAME;
+        $json["description"] = self::DESCRIPTION;
+        $json["dependencies"] = $assetPackages->getAssets();
 
-        $facade->name = BowerFacade::NAME;
-        $facade->description = FacadeInterface::DESCRIPTION;
-        $facade->dependencies = $assetPackages->getAssets();
-
-        return $facade;
+        return $json;
     }
 }

@@ -3,28 +3,29 @@
 namespace Alav\ComposerAssets\Transformer;
 
 use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
-use Alav\ComposerAssets\AssetPackages\Facade\FacadeInterface;
-use Alav\ComposerAssets\AssetPackages\Facade\NpmFacade;
 
 /**
  * Class NpmTransformer
  */
 class NpmTransformer implements TransformerInterface
 {
+    const NAME    = "npm-assets-packages";
+    const VERSION = "1.0.0";
+    const DESCRIPTION = "This file is auto-generated. Do not change it";
+
     /**
      * @param AssetPackagesInterface $assetPackages
      *
-     * @return FacadeInterface
+     * @return array
      */
     public function transform(AssetPackagesInterface $assetPackages)
     {
-        $facade = new NpmFacade();
+        $json = array();
+        $json["name"] = self::NAME;
+        $json["description"] = self::DESCRIPTION;
+        $json["version"] = self::VERSION;
+        $json["dependencies"] = $assetPackages->getAssets();
 
-        $facade->name = NpmFacade::NAME;
-        $facade->description = NpmFacade::DESCRIPTION;
-        $facade->version = NpmFacade::VERSION;
-        $facade->dependencies = $assetPackages->getAssets();
-
-        return $facade;
+        return $json;
     }
 }
