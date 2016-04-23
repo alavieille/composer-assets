@@ -9,6 +9,7 @@ interface AssetPackagesInterface
 {
     const NPM_TYPE = 'npm';
     const BOWER_TYPE = 'bower';
+    const NAME_ASSETS = "assets-packages";
 
     /**
      * @return array

@@ -14,7 +14,7 @@ interface TransformerInterface
     /**
      * @param AssetPackagesInterface $assetPackages
      *
-     * @return FacadeInterface
+     * @return array
      */
     public function transform(AssetPackagesInterface $assetPackages);
 }

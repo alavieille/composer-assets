@@ -9,7 +9,6 @@ use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
  */
 class BowerTransformer implements TransformerInterface
 {
-    const NAME = "bower-assets-packages";
     const DESCRIPTION = "This file is auto-generated. Do not change it";
 
     /**
@@ -20,7 +19,7 @@ class BowerTransformer implements TransformerInterface
     public function transform(AssetPackagesInterface $assetPackages)
     {
         $json = array();
-        $json["name"] = self::NAME;
+        $json["name"] = AssetPackagesInterface::NAME_ASSETS;
         $json["description"] = self::DESCRIPTION;
         $json["dependencies"] = $assetPackages->getAssets();
 
