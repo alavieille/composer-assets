@@ -2,6 +2,7 @@
 
 namespace Alav\ComposerAssets\Tests\Transformer;
 
+use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
 use Alav\ComposerAssets\Transformer\BowerTransformer;
 use Phake;
 
@@ -42,7 +43,7 @@ class BowerTransformerTest extends \PHPUnit_Framework_TestCase
 
         $transformPackage = $this->transformer->transform($bowerPackage);
 
-        $this->assertSame(BowerTransformer::NAME, $transformPackage['name']);
+        $this->assertSame(AssetPackagesInterface::NAME_ASSETS, $transformPackage['name']);
         $this->assertSame(BowerTransformer::DESCRIPTION, $transformPackage['description']);
         $this->assertSame($assets, $transformPackage['dependencies']);
     }
