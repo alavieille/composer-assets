@@ -2,7 +2,7 @@
 
 namespace Alav\ComposerAssets;
 
-use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
+use Alav\ComposerAssets\Installer\AssetsInstaller;
 use Alav\ComposerAssets\Loader\PackageLoader;
 use Composer\Composer;
 use Composer\EventDispatcher\Event;
@@ -57,7 +57,11 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
         $package = $this->composer->getPackage();
 
         $packageLoader = new PackageLoader($package, $packages);
-        $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
+        $vendorDir = $this->composer->getConfig()->get('vendor-dir');
+
+        $installer = new AssetsInstaller($vendorDir, $packageLoader, $this->io);
+        $installer->installNpmDependencies();
+        $installer->installBowerDependencies();
     }
 
     /**

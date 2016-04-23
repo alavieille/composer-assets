@@ -9,7 +9,6 @@ use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
  */
 class NpmTransformer implements TransformerInterface
 {
-    const NAME    = "npm-assets-packages";
     const VERSION = "1.0.0";
     const DESCRIPTION = "This file is auto-generated. Do not change it";
 
@@ -21,7 +20,7 @@ class NpmTransformer implements TransformerInterface
     public function transform(AssetPackagesInterface $assetPackages)
     {
         $json = array();
-        $json["name"] = self::NAME;
+        $json["name"] = AssetPackagesInterface::NAME_ASSETS;
         $json["description"] = self::DESCRIPTION;
         $json["version"] = self::VERSION;
         $json["dependencies"] = $assetPackages->getAssets();

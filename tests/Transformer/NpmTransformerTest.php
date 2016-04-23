@@ -2,6 +2,7 @@
 
 namespace Alav\ComposerAssets\Tests\Transformer;
 
+use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
 use Alav\ComposerAssets\Transformer\NpmTransformer;
 use Phake;
 
@@ -42,7 +43,7 @@ class NpmTransformerTest extends \PHPUnit_Framework_TestCase
 
         $transformPackage = $this->transformer->transform($npmPackage);
 
-        $this->assertSame(NpmTransformer::NAME, $transformPackage['name']);
+        $this->assertSame(AssetPackagesInterface::NAME_ASSETS, $transformPackage['name']);
         $this->assertSame(NpmTransformer::DESCRIPTION, $transformPackage['description']);
         $this->assertSame(NpmTransformer::VERSION, $transformPackage['version']);
         $this->assertSame($assets, $transformPackage['dependencies']);
