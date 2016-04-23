@@ -3,7 +3,6 @@
 namespace Alav\ComposerAssets\Transformer;
 
 use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
-use Alav\ComposerAssets\AssetPackages\Facade\FacadeInterface;
 
 /**
  * Interface TransformerInterface

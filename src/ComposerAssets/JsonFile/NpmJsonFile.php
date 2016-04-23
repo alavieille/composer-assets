@@ -2,8 +2,6 @@
 
 namespace Alav\ComposerAssets\JsonFile;
 
-use Composer\Json\JsonFile;
-
 /**
  * Class NpmJsonFile
  */
