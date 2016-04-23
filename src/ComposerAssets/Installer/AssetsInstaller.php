@@ -55,8 +55,8 @@ class AssetsInstaller
         $jsonFileNpm = new NpmJsonFile();
         $jsonFileNpm->createPackageJson($assets);
 
-     /*   $processExec = new ProcessExecutor($this->io);
+        $processExec = new ProcessExecutor($this->io);
         $cmd = ProcessExecutor::escape("npm install");
-        $processExec->execute($cmd);*/
+        $processExec->execute($cmd);
     }
 }

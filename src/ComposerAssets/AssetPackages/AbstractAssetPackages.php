@@ -24,7 +24,7 @@ abstract class AbstractAssetPackages implements AssetPackagesInterface
     public function addAsset($name, $version)
     {
         if (isset($this->assets[$name])) {
-            $this->assets[$name] .= ' ' . $version;
+            $this->assets[$name] .= ' '.$version;
         } else {
             $this->assets[$name] = $version;
         }

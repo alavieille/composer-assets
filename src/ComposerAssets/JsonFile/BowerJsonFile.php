@@ -40,7 +40,7 @@ class BowerJsonFile extends AbstractJsonFile
         $jsonFile = new JsonFile(self::RC_FILE_NAME);
         if (!$jsonFile->exists()) {
             $jsonContent = [];
-            $jsonContent['directory'] = $this->vendorDir . '/bower_components';
+            $jsonContent['directory'] = $this->vendorDir.'/bower_components';
             $jsonFile->write($jsonContent);
         }
     }
