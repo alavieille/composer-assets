@@ -1,6 +1,7 @@
 <?php
 
 namespace Alav\ComposerAssets\Installer;
+
 use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
 use Alav\ComposerAssets\JsonFile\BowerJsonFile;
 use Alav\ComposerAssets\JsonFile\NpmJsonFile;
