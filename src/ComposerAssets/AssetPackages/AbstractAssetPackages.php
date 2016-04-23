@@ -29,4 +29,14 @@ abstract class AbstractAssetPackages implements AssetPackagesInterface
             $this->assets[$name] = $version;
         }
     }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasAsset($name)
+    {
+        return array_key_exists($name, $this->assets);
+    }
 }

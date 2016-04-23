@@ -58,8 +58,9 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
 
         $packageLoader = new PackageLoader($package, $packages);
         $vendorDir = $this->composer->getConfig()->get('vendor-dir');
+        $binDir = $this->composer->getConfig()->get('bin-dir');
 
-        $installer = new AssetsInstaller($vendorDir, $packageLoader, $this->io);
+        $installer = new AssetsInstaller($vendorDir, $binDir, $packageLoader, $this->io);
         $installer->installNpmDependencies();
         $installer->installBowerDependencies();
     }
