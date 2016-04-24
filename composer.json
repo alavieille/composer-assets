@@ -20,7 +20,7 @@
         }
     },
     "extra": {
-      "class": "Alav\\ComposerAssets\\ComposerAssetsPlugin",
+      "class": "Alav\\ComposerAssets\\ComposerAssetsPlugin"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
