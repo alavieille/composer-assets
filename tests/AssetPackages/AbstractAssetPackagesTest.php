@@ -69,4 +69,16 @@ abstract class AbstractAssetPackagesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($firstVersion.' '.$secondVersion, $assets[$packageName]);
 
     }
+
+    /**
+     * Test has asset
+     */
+    public function testHasAsset()
+    {
+        $assetName = 'fakeAsset';
+        $this->assertFalse($this->packages->hasAsset($assetName));
+
+        $this->packages->addAsset($assetName, '*');
+        $this->assertTrue($this->packages->hasAsset($assetName));
+    }
 }
