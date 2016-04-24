@@ -19,13 +19,48 @@ class AssetsInstaller
 
     protected $packageLoader;
     protected $vendorDir;
+    protected $binDir;
     protected $io;
 
-    public function __construct($vendorDir, PackageLoader $packageLoader, IOInterface $io)
-    {
+    /**
+     * @param string        $vendorDir
+     * @param string        $binDir
+     * @param PackageLoader $packageLoader
+     * @param IOInterface   $io
+     */
+    public function __construct(
+        $vendorDir,
+        $binDir,
+        PackageLoader $packageLoader,
+        IOInterface $io
+    ) {
         $this->vendorDir = $vendorDir;
+        $this->binDir = $binDir;
         $this->packageLoader = $packageLoader;
         $this->io = $io;
+    }
+
+    /**
+     * Install Npm Dependencies
+     */
+    public function installNpmDependencies()
+    {
+        $assetsNpm = $this->packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
+        // install local bower
+        if (false === $assetsNpm->hasAsset('bower')) {
+            $assetsNpm->addAsset('bower', '*');
+        }
+
+        $npmTransformer = new NpmTransformer();
+        $assets = $npmTransformer->transform($assetsNpm);
+
+        $jsonFileNpm = new NpmJsonFile();
+        $jsonFileNpm->createPackageJson($assets);
+
+        $processExec = new ProcessExecutor($this->io);
+        $npmBin = $this->binDir.'/npm';
+
+        $processExec->execute($npmBin.' install');
     }
 
     /**
@@ -40,23 +75,5 @@ class AssetsInstaller
 
         $jsonFileBower = new BowerJsonFile($this->vendorDir);
         $jsonFileBower->createBowerJson($assets);
-    }
-
-    /**
-     * Install Npm Dependecies
-     */
-    public function installNpmDependencies()
-    {
-        $assetsNpm = $this->packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
-
-        $npmTransformer = new NpmTransformer();
-        $assets = $npmTransformer->transform($assetsNpm);
-
-        $jsonFileNpm = new NpmJsonFile();
-        $jsonFileNpm->createPackageJson($assets);
-
-        $processExec = new ProcessExecutor($this->io);
-        $cmd = ProcessExecutor::escape("npm install");
-        $processExec->execute($cmd);
     }
 }
