@@ -1,7 +1,5 @@
 ## Informations
-<!--- 
-Orchestra version (1.0, 1.1, master, ...)
---->
+<!--- Orchestra version (1.0, 1.1, master, ...) --->
 **Orchestra Version** : 
 
 **Issue Type**: 
@@ -19,9 +17,7 @@ For instance if it is an issue for a bug :
 - [ ] Other
 
 ## Description
-<!--- 
-If is a bug issue
---->
+<!--- If is a bug issue--->
 ### Expected behavior and actual behavior
 
 ### Steps to reproduce the problem
