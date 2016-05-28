@@ -23,6 +23,7 @@ class BowerJsonFileTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->bowerJsonFile = new BowerJsonFile($this->fakeVendorDir);
+        $this->cleanBowerFile();
     }
 
     /**
@@ -30,14 +31,7 @@ class BowerJsonFileTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $file = 'bower.json';
-        if (file_exists($file)) {
-            unlink($file);
-        }
-        $file = '.bowerrc';
-        if (file_exists($file)) {
-            unlink($file);
-        }
+        $this->cleanBowerFile();
     }
 
     /**
@@ -70,4 +64,20 @@ class BowerJsonFileTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Alav\ComposerAssets\JsonFile\JsonFileException');
         $this->bowerJsonFile->createBowerJson($content);
     }
+
+    /**
+     * Remove bower.json and .bowerrc
+     */
+    protected function cleanBowerFile()
+    {
+        $file = 'bower.json';
+        if (file_exists($file)) {
+            unlink($file);
+        }
+        $file = '.bowerrc';
+        if (file_exists($file)) {
+            unlink($file);
+        }
+    }
+
 }

@@ -10,6 +10,7 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
+use Composer\Util\ProcessExecutor;
 
 /**
  * Class ComposerAssetsPlugin
@@ -60,7 +61,8 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
         $vendorDir = $this->composer->getConfig()->get('vendor-dir');
         $binDir = $this->composer->getConfig()->get('bin-dir');
 
-        $installer = new AssetsInstaller($vendorDir, $binDir, $packageLoader, $this->io);
+        $processExecutor = new ProcessExecutor($this->io);
+        $installer = new AssetsInstaller($vendorDir, $binDir, $packageLoader, $processExecutor);
         $installer->installNpmDependencies();
         $installer->installBowerDependencies();
     }
