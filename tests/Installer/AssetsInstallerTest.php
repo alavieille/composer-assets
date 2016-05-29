@@ -32,7 +32,6 @@ class AssetsInstallerTest extends \PHPUnit_Framework_TestCase
         $this->assetInstaller = new AssetsInstaller(
             $this->vendorDir,
             $this->binDir,
-            $this->packageLoader,
             $this->processExecutor
         );
     }
@@ -47,7 +46,7 @@ class AssetsInstallerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->processExecutor)->getErrorOutput()->thenReturn('no global');
         Phake::when($this->packageLoader)->extractAssets(AssetPackagesInterface::NPM_TYPE)->thenReturn($assetPackages);
 
-        $this->assetInstaller->installNpmDependencies();
+        $this->assetInstaller->installNpmDependencies($assetPackages);
 
         Phake::verify($this->processExecutor)->execute($this->binDir.'/npm install');
     }
@@ -63,7 +62,7 @@ class AssetsInstallerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->packageLoader)->extractAssets(AssetPackagesInterface::BOWER_TYPE)->thenReturn($assetPackages);
         $this->setExpectedException('Alav\ComposerAssets\Installer\UnexistingBowerException');
 
-        $this->assetInstaller->installBowerDependencies();
+        $this->assetInstaller->installBowerDependencies($assetPackages);
     }
 
     /**
@@ -76,7 +75,7 @@ class AssetsInstallerTest extends \PHPUnit_Framework_TestCase
         Phake::when($this->processExecutor)->getErrorOutput()->thenReturn(null);
         Phake::when($this->packageLoader)->extractAssets(AssetPackagesInterface::BOWER_TYPE)->thenReturn($assetPackages);
 
-        $this->assetInstaller->installBowerDependencies();
+        $this->assetInstaller->installBowerDependencies($assetPackages);
         Phake::verify($this->processExecutor)->execute('bower install');
 
     }

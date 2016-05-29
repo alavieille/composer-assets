@@ -21,4 +21,11 @@ interface AssetPackagesInterface
      * @param string $version
      */
     public function addAsset($name, $version);
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasAsset($name);
 }

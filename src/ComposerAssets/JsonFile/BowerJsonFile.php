@@ -27,7 +27,7 @@ class BowerJsonFile extends AbstractJsonFile
      */
     public function createBowerJson(array $jsonContent)
     {
-        $jsonFile = $this->createJsonFile(self::BOWER_FILE_NAME);
+        $jsonFile = $this->initJsonFile(self::BOWER_FILE_NAME);
         $jsonFile->write($jsonContent);
         $this->createBoweRc();
     }

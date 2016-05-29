@@ -2,8 +2,11 @@
 
 namespace Alav\ComposerAssets;
 
+use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
 use Alav\ComposerAssets\Installer\AssetsInstaller;
+use Alav\ComposerAssets\JsonFile\AssetsLockFile;
 use Alav\ComposerAssets\Loader\PackageLoader;
+use Alav\ComposerAssets\Transformer\AssetsLockTransformer;
 use Composer\Composer;
 use Composer\EventDispatcher\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
@@ -54,17 +57,20 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostInstall(Event $event)
     {
-        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
-        $package = $this->composer->getPackage();
+        $assetLockFile = new AssetsLockFile();
 
-        $packageLoader = new PackageLoader($package, $packages);
-        $vendorDir = $this->composer->getConfig()->get('vendor-dir');
-        $binDir = $this->composer->getConfig()->get('bin-dir');
+        if (false === $assetLockFile->existFile()) {
+            $this->onPostUpdate($event);
+        }
 
-        $processExecutor = new ProcessExecutor($this->io);
-        $installer = new AssetsInstaller($vendorDir, $binDir, $packageLoader, $processExecutor);
-        $installer->installNpmDependencies();
-        $installer->installBowerDependencies();
+        $assetLockTransformer = new AssetsLockTransformer();
+
+        $jsonContent = $assetLockFile->readJsonFile();
+        list($assetsNpm, $assetsBower) = $assetLockTransformer->reverseTransform($jsonContent);
+
+        $installer = $this->getInstallerAssets();
+        $installer->installNpmDependencies($assetsNpm);
+        $installer->installBowerDependencies($assetsBower);
     }
 
     /**
@@ -72,7 +78,33 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostUpdate(Event $event)
     {
-        $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
-        $this->composer->getPackage();
+        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
+        $package = $this->composer->getPackage();
+        $packageLoader = new PackageLoader($package, $packages);
+
+        $assetsNpm = $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
+        $assetsBower = $packageLoader->extractAssets(AssetPackagesInterface::BOWER_TYPE);
+
+        $installer = $this->getInstallerAssets();
+        $installer->installNpmDependencies($assetsNpm);
+        $installer->installBowerDependencies($assetsBower);
+
+        $assetLockTransformer = new AssetsLockTransformer();
+        $assets = $assetLockTransformer->transform($assetsNpm, $assetsBower);
+        $assetLockFile = new AssetsLockFile();
+        $assetLockFile->createAssetsLockFile($assets);
+    }
+
+    /**
+     * @return AssetsInstaller
+     */
+    protected function getInstallerAssets()
+    {
+        $vendorDir = $this->composer->getConfig()->get('vendor-dir');
+        $binDir = $this->composer->getConfig()->get('bin-dir');
+
+        $processExecutor = new ProcessExecutor($this->io);
+
+        return new AssetsInstaller($vendorDir, $binDir, $processExecutor);
     }
 }
