@@ -13,7 +13,7 @@
         "phpunit/phpunit": "4.5.*",
         "phake/phake": "@stable",
         "composer/composer": "~1.0@dev",
-        "codeclimate/php-test-reporter": "dev-master"
+        "codeclimate/php-test-reporter": "~0.3.2"
     },
     "autoload": {
         "psr-4": {
