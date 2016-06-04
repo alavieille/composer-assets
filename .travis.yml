@@ -6,7 +6,7 @@ php:
 install:
   - composer update --no-progress --prefer-dist
 
-script: ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+script: ./vendor/bin/phpunit
 
 addons:
     code_climate:
