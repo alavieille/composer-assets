@@ -16,7 +16,7 @@ abstract class AbstractJsonFile
      * @return JsonFile
      * @throws JsonFileException
      */
-    protected function createJsonFile($fileName)
+    protected function initJsonFile($fileName)
     {
         $jsonFile = new JsonFile($fileName);
         if ($jsonFile->exists()) {
