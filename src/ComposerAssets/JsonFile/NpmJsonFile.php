@@ -14,7 +14,7 @@ class NpmJsonFile extends AbstractJsonFile
      */
     public function createPackageJson(array $jsonContent)
     {
-        $jsonFile = $this->createJsonFile(self::NPM_FILE_NAME);
+        $jsonFile = $this->initJsonFile(self::NPM_FILE_NAME);
         $jsonFile->write($jsonContent);
     }
 }

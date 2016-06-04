@@ -5,7 +5,6 @@ namespace Alav\ComposerAssets\Installer;
 use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
 use Alav\ComposerAssets\JsonFile\BowerJsonFile;
 use Alav\ComposerAssets\JsonFile\NpmJsonFile;
-use Alav\ComposerAssets\Loader\PackageLoader;
 use Alav\ComposerAssets\Transformer\BowerTransformer;
 use Alav\ComposerAssets\Transformer\NpmTransformer;
 use Composer\Util\ProcessExecutor;
@@ -15,7 +14,6 @@ use Composer\Util\ProcessExecutor;
  */
 class AssetsInstaller
 {
-    protected $packageLoader;
     protected $vendorDir;
     protected $binDir;
     protected $processExecutor;
@@ -23,27 +21,25 @@ class AssetsInstaller
     /**
      * @param string          $vendorDir
      * @param string          $binDir
-     * @param PackageLoader   $packageLoader
      * @param ProcessExecutor $processExecutor
      */
     public function __construct(
         $vendorDir,
         $binDir,
-        PackageLoader $packageLoader,
         ProcessExecutor $processExecutor
     ) {
         $this->vendorDir = $vendorDir;
         $this->binDir = $binDir;
-        $this->packageLoader = $packageLoader;
         $this->processExecutor = $processExecutor;
     }
 
     /**
      * Install Npm Dependencies
+     *
+     * @param AssetPackagesInterface $assetsNpm
      */
-    public function installNpmDependencies()
+    public function installNpmDependencies(AssetPackagesInterface $assetsNpm)
     {
-        $assetsNpm = $this->packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
         // install local bower
         if ( false === $assetsNpm->hasAsset('bower') &&
              false === $this->hasGlobalBower()
@@ -64,11 +60,11 @@ class AssetsInstaller
 
     /**
      * Install bower dependencies
+     *
+     * @param AssetPackagesInterface $assetsBower
      */
-    public function installBowerDependencies()
+    public function installBowerDependencies(AssetPackagesInterface $assetsBower)
     {
-        $assetsBower = $this->packageLoader->extractAssets(AssetPackagesInterface::BOWER_TYPE);
-
         $bowerTransformer = new BowerTransformer();
         $assets = $bowerTransformer->transform($assetsBower);
 
