@@ -7,3 +7,7 @@ install:
   - composer update --no-progress --prefer-dist
 
 script: ./vendor/bin/phpunit
+
+addons:
+    code_climate:
+        repo_token: d8a6fa5a7220387f79a41cb578a2acb7d95979a03370a6802b212ba8af87735f
