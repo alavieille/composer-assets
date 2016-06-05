@@ -51,7 +51,7 @@ class AssetsLockTransformerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test reverse transform
      */
-    public function reverseTransform()
+    public function testReverseTransform()
     {
         $npm = array("fakeAssetsNpm" => "fakeVersion");
         $bower = array("fakeAssetsBower" => "fakeVersion");
@@ -62,7 +62,7 @@ class AssetsLockTransformerTest extends \PHPUnit_Framework_TestCase
 
         $transformPackage = $this->transformer->reverseTransform($jsonContent);
         $this->assertTrue(is_array($transformPackage));
-        $this->assertCount(2, sizeof($transformPackage));
+        $this->assertCount(2, $transformPackage);
         list($assetsNpm, $assetsBower) = $transformPackage;
 
         $this->assertInstanceOf('Alav\ComposerAssets\AssetPackages\AssetPackagesInterface', $assetsNpm);
