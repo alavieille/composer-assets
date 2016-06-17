@@ -25,6 +25,7 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
      * @var Composer
      */
     protected $composer;
+    /** @var  IOInterface */
     protected $io;
 
     /**
@@ -53,30 +54,37 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * @param Event $event
+     * On post install
      */
-    public function onPostInstall(Event $event)
+    public function onPostInstall()
     {
         $assetLockFile = new AssetsLockFile();
 
         if (false === $assetLockFile->existFile()) {
-            $this->onPostUpdate($event);
+            $this->onPostUpdate();
         }
 
         $assetLockTransformer = new AssetsLockTransformer();
 
+        $this->io->write('<info>Reading assets lock file</info>', true);
         $jsonContent = $assetLockFile->readJsonFile();
         list($assetsNpm, $assetsBower) = $assetLockTransformer->reverseTransform($jsonContent);
 
         $installer = $this->getInstallerAssets();
+
+        $this->io->write('<info>Installing Npm dependencies:</info>', true);
+        $this->generateOutputAssets($assetsNpm);
         $installer->installNpmDependencies($assetsNpm);
+
+        $this->io->write('<info>Installing Bower dependencies:</info>', true);
+        $this->generateOutputAssets($assetsBower);
         $installer->installBowerDependencies($assetsBower);
     }
 
     /**
-     * @param Event $event
+     * On post update
      */
-    public function onPostUpdate(Event $event)
+    public function onPostUpdate()
     {
         $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
         $package = $this->composer->getPackage();
@@ -84,14 +92,20 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
 
         $assetsNpm = $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
         $assetsBower = $packageLoader->extractAssets(AssetPackagesInterface::BOWER_TYPE);
-
         $installer = $this->getInstallerAssets();
+
+        $this->io->write('<info>Installing Npm dependencies:</info>', true);
+        $this->io->write($this->generateOutputAssets($assetsNpm));
         $installer->installNpmDependencies($assetsNpm);
+
+        $this->io->write('<info>Installing Bower dependencies:</info>', true);
+        $this->io->write($this->generateOutputAssets($assetsBower));
         $installer->installBowerDependencies($assetsBower);
 
         $assetLockTransformer = new AssetsLockTransformer();
         $assets = $assetLockTransformer->transform($assetsNpm, $assetsBower);
         $assetLockFile = new AssetsLockFile();
+        $this->io->write('<info>Writing assets lock file</info>', true);
         $assetLockFile->createAssetsLockFile($assets);
     }
 
@@ -106,5 +120,20 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
         $processExecutor = new ProcessExecutor($this->io);
 
         return new AssetsInstaller($vendorDir, $binDir, $processExecutor);
+    }
+
+    /**
+     * @param AssetPackagesInterface $assetPackage
+     */
+    protected function generateOutputAssets(AssetPackagesInterface $assetPackage)
+    {
+        $assets = $assetPackage->getAssets();
+        if (count($assets) < 1) {
+            $this->io->write(' <info>no dependencies found</info>', true);
+        }
+        foreach ($assets as $name => $version) {
+            $this->io->write(' - <info>'.$name.'</info> (<comment>'.$version.'</comment>)', true);
+            $this->io->write('', true);
+        }
     }
 }
