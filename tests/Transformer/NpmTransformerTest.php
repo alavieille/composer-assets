@@ -46,6 +46,8 @@ class NpmTransformerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(AssetPackagesInterface::NAME_ASSETS, $transformPackage['name']);
         $this->assertSame(NpmTransformer::DESCRIPTION, $transformPackage['description']);
         $this->assertSame(NpmTransformer::VERSION, $transformPackage['version']);
+        $this->assertSame(NpmTransformer::LICENCE, $transformPackage['license']);
+        $this->assertTrue($transformPackage['private']);
         $this->assertSame($assets, $transformPackage['dependencies']);
     }
 }

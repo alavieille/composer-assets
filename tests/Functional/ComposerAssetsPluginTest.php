@@ -243,6 +243,8 @@ class ComposerAssetsTest extends \PHPUnit_Framework_TestCase
             json_encode(array(
                 "name"=> "assets-packages",
                 "description" => "This file is auto-generated. Do not change it",
+                "license" => "UNLICENSED",
+                "private" => true,
                 "version" => "1.0.0",
                 "dependencies" => array('which' => '*', 'test' => '~0.5', 'bower' => '*'),
             ))
