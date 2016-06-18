@@ -1,8 +1,8 @@
 {
-    "name": "alavielle/composer-assets",
+    "name": "alav/composer-assets",
     "description": "Composer Plugin for installing Assets (bower,npm)",
     "keywords": ["composer", "assets", "npm", "bower"],
-    "homepage": "https://github.com/itkg-alavieille/composer-assets.git",
+    "homepage": "https://github.com/alavieille/composer-assets.git",
     "license": "MIT",
     "type": "composer-plugin",
     "require": {
