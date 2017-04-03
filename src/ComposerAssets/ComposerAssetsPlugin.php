@@ -83,7 +83,7 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
                 $installer->installBowerDependencies($assetsBower);
             }
         } catch (JsonFileException $e) {
-            $this->io->writeError('<error>' . $e->getMessage() . '<error>');
+            $this->io->writeError('<error>' . $e->getMessage() . '</error>');
         }
     }
 
