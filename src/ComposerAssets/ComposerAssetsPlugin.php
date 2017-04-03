@@ -5,6 +5,7 @@ namespace Alav\ComposerAssets;
 use Alav\ComposerAssets\AssetPackages\AssetPackagesInterface;
 use Alav\ComposerAssets\Installer\AssetsInstaller;
 use Alav\ComposerAssets\JsonFile\AssetsLockFile;
+use Alav\ComposerAssets\JsonFile\JsonFileException;
 use Alav\ComposerAssets\Loader\PackageLoader;
 use Alav\ComposerAssets\Transformer\AssetsLockTransformer;
 use Composer\Composer;
@@ -63,22 +64,27 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
         if (false === $assetLockFile->existFile()) {
             $this->onPostUpdate();
         }
+        try {
+            $assetLockTransformer = new AssetsLockTransformer();
 
-        $assetLockTransformer = new AssetsLockTransformer();
+            $this->io->write('<info>Reading assets lock file</info>', true);
+            $jsonContent = $assetLockFile->readJsonFile();
+            list($assetsNpm, $assetsBower) = $assetLockTransformer->reverseTransform($jsonContent);
 
-        $this->io->write('<info>Reading assets lock file</info>', true);
-        $jsonContent = $assetLockFile->readJsonFile();
-        list($assetsNpm, $assetsBower) = $assetLockTransformer->reverseTransform($jsonContent);
+            $installer = $this->getInstallerAssets();
 
-        $installer = $this->getInstallerAssets();
+            $this->io->write('<info>Installing Npm dependencies:</info>', true);
+            $this->generateOutputAssets($assetsNpm);
+            $installer->installNpmDependencies($assetsNpm);
 
-        $this->io->write('<info>Installing Npm dependencies:</info>', true);
-        $this->generateOutputAssets($assetsNpm);
-        $installer->installNpmDependencies($assetsNpm);
-
-        $this->io->write('<info>Installing Bower dependencies:</info>', true);
-        $this->generateOutputAssets($assetsBower);
-        $installer->installBowerDependencies($assetsBower);
+            if (!empty($assetsBower->getAssets())) {
+                $this->io->write('<info>Installing Bower dependencies:</info>', true);
+                $this->generateOutputAssets($assetsBower);
+                $installer->installBowerDependencies($assetsBower);
+            }
+        } catch (JsonFileException $e) {
+            $this->io->writeError('<error>' . $e->getMessage() . '<error>');
+        }
     }
 
     /**
@@ -86,27 +92,34 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostUpdate()
     {
-        $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
-        $package = $this->composer->getPackage();
-        $packageLoader = new PackageLoader($package, $packages);
+        try {
+            $packages = $this->composer->getRepositoryManager()->getLocalRepository()->getCanonicalPackages();
+            $package = $this->composer->getPackage();
+            $packageLoader = new PackageLoader($package, $packages);
 
-        $assetsNpm = $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
-        $assetsBower = $packageLoader->extractAssets(AssetPackagesInterface::BOWER_TYPE);
-        $installer = $this->getInstallerAssets();
+            $assetsNpm = $packageLoader->extractAssets(AssetPackagesInterface::NPM_TYPE);
+            $assetsBower = $packageLoader->extractAssets(AssetPackagesInterface::BOWER_TYPE);
+            $installer = $this->getInstallerAssets();
 
-        $this->io->write('<info>Installing Npm dependencies:</info>', true);
-        $this->io->write($this->generateOutputAssets($assetsNpm));
-        $installer->installNpmDependencies($assetsNpm);
+            $this->io->write('<info>Installing Npm dependencies:</info>', true);
+            $this->generateOutputAssets($assetsNpm);
 
-        $this->io->write('<info>Installing Bower dependencies:</info>', true);
-        $this->io->write($this->generateOutputAssets($assetsBower));
-        $installer->installBowerDependencies($assetsBower);
+            $installer->installNpmDependencies($assetsNpm);
 
-        $assetLockTransformer = new AssetsLockTransformer();
-        $assets = $assetLockTransformer->transform($assetsNpm, $assetsBower);
-        $assetLockFile = new AssetsLockFile();
-        $this->io->write('<info>Writing assets lock file</info>', true);
-        $assetLockFile->createAssetsLockFile($assets);
+            if (!empty($assetsBower->getAssets())) {
+                $this->io->write('<info>Installing Bower dependencies:</info>', true);
+                $this->generateOutputAssets($assetsBower);
+                $installer->installBowerDependencies($assetsBower);
+            }
+
+            $assetLockTransformer = new AssetsLockTransformer();
+            $assets = $assetLockTransformer->transform($assetsNpm, $assetsBower);
+            $assetLockFile = new AssetsLockFile();
+            $this->io->write('<info>Writing assets lock file</info>', true);
+            $assetLockFile->createAssetsLockFile($assets);
+        } catch (JsonFileException $e) {
+            $this->io->writeError('<error>' . $e->getMessage() . '<error>');
+        }
     }
 
     /**
