@@ -9,14 +9,14 @@ use Exception;
  */
 class JsonFileException extends Exception
 {
-    protected $message = 'File already exist. Can\'t install assets';
+    protected $message = 'JsonFileException: File {fileName} already exist. Can\'t install assets. Remove this file before.';
 
     /**
-     * @param null           $message
-     * @param int            $code
-     * @param Exception|null $previous
+     * construct json file exception
+     *
+     * @param String $fileName
      */
-    public function __construct($message = null, $code = 0, Exception $previous = null) {
-        parent::__construct($message, $code, $previous);
+    public function __construct($fileName) {
+        parent::__construct(str_replace('{fileName}', $fileName, $this->message));
     }
 }

@@ -22,7 +22,7 @@ abstract class AbstractJsonFile
         if ($jsonFile->exists()) {
             $jsonContent = $jsonFile->read();
             if (isset($jsonContent['name']) && $jsonContent['name'] !== AssetPackagesInterface::NAME_ASSETS) {
-                throw new JsonFileException();
+                throw new JsonFileException($fileName);
             }
         }
 
