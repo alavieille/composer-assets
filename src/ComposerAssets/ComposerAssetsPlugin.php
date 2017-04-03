@@ -118,7 +118,7 @@ class ComposerAssetsPlugin implements PluginInterface, EventSubscriberInterface
             $this->io->write('<info>Writing assets lock file</info>', true);
             $assetLockFile->createAssetsLockFile($assets);
         } catch (JsonFileException $e) {
-            $this->io->writeError('<error>' . $e->getMessage() . '<error>');
+            $this->io->writeError('<error>' . $e->getMessage() . '</error>');
         }
     }
 
